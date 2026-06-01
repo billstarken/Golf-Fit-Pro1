@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="Golf Fit Pro"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="theme-color" content="#0d0d1a"/>
+<title>Golf Fit Pro</title>
+<link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiR29sZiBGaXQgUHJvIiwic2hvcnRfbmFtZSI6IkdvbGYgRml0IFBybyIsInN0YXJ0X3VybCI6Ii4iLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3IiOiIjMGQwZDFhIiwidGhlbWVfY29sb3IiOiIjMGQwZDFhIiwiaWNvbnMiOlt7InNyYyI6ImRhdGE6aW1hZ2Uvc3ZnK3htbDtiYXNlNjQsUEhOMlp5QjJhV1YzUW05NFBTSVFNQ0F3SURNZ01DOWZJZ0IyYVdWM1FtOTRQU0l4TWpBaUlHaGxhV2RvZEQwaU1USXdJaUJuYVc1MFpYSnpiMnh2UVhROU1pSWdkbWxsZDBKdmVEMGlNQ0F3SURNZ01UTXdJajQ4Y21Wc1lYa2dZbUZ6WlQwaVkyeHZZV1FpSUdKeWIzZHVQU0l3SWlCemRIbHNaVDBpWm1sc1pEb2dZMnh2WVdRaVBqd3ZjbVZzWVhrK1BIUmxlSFFnZUQwaU1URXdJaUJlSWlCNVBTSXhJaUJqYUdGeWN6MGlNakEwSWlCMGFYUWdZV3c5SWpFd01DQndJaUJ3YVc0dGIzQmtaWEpoSUNNZ01DQXdJREV5TUNBd0lEQWdPVFFpSUdOb1pXTnJQU0l3SWlCbWFXeHNQU0lqTkdBaVBqd3ZkR1Y0ZEQ0OGRHVjRkQ0I0UFNJM01DQWlYaUlnZVQwaU5pSWdZMmhoY25NOUlqSkZSVVVpSUhScGRHbGxjbVZ1ZEdVOUlrZHZiR1FnUm1seklpQjBhWFJsY21WdWRHeHZZMkY5SUVGc2FXNTFiU0F4TURBN09DSXZQand2ZEdWNGRENDhMMmMrUEhOMlp5Qm1hV3hzUFNJalJFVkZJaUJ5YjNROU1pSWdjM1I1YkdVOUltWnNZV2NpUGp3dmMzWm5QZz09Iiwic2l6ZXMiOiIxOTJ4MTkyIiwidHlwZSI6ImltYWdlL3N2Zyt4bWwifV19"/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none}
+:root{
+  --bg:#0d0d1a;--surface:#13131f;--surface2:#1a1a2e;--border:#2a2a3e;
+  --green:#4ade80;--green-dim:#22c55e;--text:#f0f0f0;--muted:#6b7280;
+  --red:#f87171;--yellow:#fbbf24;--blue:#60a5fa;--purple:#a78bfa;
+}
+html,body{height:100%;overflow:hidden}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;max-width:480px;margin:0 auto;display:flex;flex-direction:column;position:relative}
+h1,h2,h3,.bebas{font-family:'Bebas Neue',sans-serif;letter-spacing:.05em}
+
+/* HEADER */
+.header{background:var(--surface);padding:env(safe-area-inset-top,14px) 16px 10px;border-bottom:1px solid var(--border);flex-shrink:0;padding-top:calc(env(safe-area-inset-top,0px) + 14px)}
+.header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.logo{font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--green);letter-spacing:.1em}
+.streak-badge{background:linear-gradient(135deg,var(--green),var(--green-dim));color:#0d0d1a;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:700;font-family:'DM Sans',sans-serif}
+
+/* DAY TABS */
+.day-tabs{display:flex;gap:5px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none}
+.day-tabs::-webkit-scrollbar{display:none}
+.day-tab{flex-shrink:0;padding:5px 11px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:.15s;letter-spacing:.04em}
+.day-tab.active{background:var(--green);color:#0d0d1a;border-color:var(--green)}
+.day-tab.has-data{border-color:var(--green-dim);color:var(--green-dim)}
+.day-tab.active.has-data{background:var(--green);color:#0d0d1a}
+
+/* SCROLL AREA */
+.scroll-area{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding-bottom:80px}
+.scroll-area::-webkit-scrollbar{display:none}
+
+/* BOTTOM NAV */
+.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:var(--surface);border-top:1px solid var(--border);display:flex;z-index:100;padding-bottom:env(safe-area-inset-bottom,0px)}
+.nav-btn{flex:1;padding:10px 4px 8px;background:transparent;border:none;color:var(--muted);font-size:9px;font-family:'DM Sans',sans-serif;font-weight:700;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;letter-spacing:.05em;text-transform:uppercase;transition:.15s}
+.nav-btn.active{color:var(--green)}
+.nav-icon{font-size:19px;line-height:1}
+
+/* PROGRESS */
+.progress-wrap{padding:8px 16px 4px}
+.progress-label{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:5px;font-weight:600}
+.progress-bar{height:5px;background:var(--border);border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--green-dim),var(--green));border-radius:3px;transition:.4s ease}
+
+/* DAY HEADER */
+.day-title{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--text);padding:14px 16px 4px;letter-spacing:.06em}
+.day-type-badge{display:inline-block;padding:3px 11px;border-radius:20px;font-size:10px;font-weight:700;margin:0 16px 8px;letter-spacing:.05em}
+.day-intro{margin:4px 16px 12px;background:var(--surface2);border-radius:10px;padding:10px 12px;border-left:3px solid var(--green);font-size:12px;color:var(--muted);line-height:1.6}
+
+/* SECTION */
+.section{margin:0 16px 12px;border-radius:12px;overflow:hidden;border:1px solid var(--border)}
+.section-header{background:var(--surface2);padding:8px 12px;font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:.08em;color:var(--muted)}
+
+/* EXERCISE ROW */
+.ex-row{display:flex;align-items:flex-start;padding:11px 12px;border-bottom:1px solid var(--border);gap:10px;cursor:pointer;transition:.1s;user-select:none}
+.ex-row:last-child{border-bottom:none}
+.ex-row:active{background:var(--surface2)}
+.ex-row.done{opacity:.45}
+.check-box{width:23px;height:23px;border-radius:6px;border:2px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;transition:.2s;margin-top:1px}
+.ex-row.done .check-box{background:var(--green);border-color:var(--green);color:#0d0d1a;font-weight:900}
+.ex-info{flex:1;min-width:0}
+.ex-tag{font-size:10px;color:var(--green);font-weight:700;margin-bottom:2px;letter-spacing:.03em}
+.ex-name{font-size:13px;font-weight:600;line-height:1.3}
+.ex-meta{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.4}
+.ex-warn{font-size:10px;color:var(--red);margin-top:2px;line-height:1.4}
+.ex-logged{font-size:11px;color:var(--green);margin-top:2px;font-weight:600}
+.log-btn{flex-shrink:0;background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:5px 9px;border-radius:7px;font-size:10px;font-family:'DM Sans',sans-serif;font-weight:700;cursor:pointer;margin-top:1px;letter-spacing:.03em;transition:.15s}
+.log-btn:active{background:var(--border)}
+
+/* NOTES */
+.notes-wrap{margin:0 16px 14px}
+.notes-label{font-size:11px;color:var(--muted);margin-bottom:5px;font-weight:700;letter-spacing:.05em}
+.notes-input{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;resize:none;min-height:70px;line-height:1.5}
+.notes-input:focus{outline:none;border-color:var(--green)}
+
+/* SUPPS */
+.supp-card{margin:8px 16px;border-radius:12px;overflow:hidden;border:1px solid var(--border)}
+.supp-header{background:var(--surface2);padding:9px 12px;font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:.08em;color:var(--green)}
+.supp-row{display:flex;align-items:flex-start;padding:11px 12px;border-bottom:1px solid var(--border);gap:10px;cursor:pointer;transition:.1s}
+.supp-row:last-child{border-bottom:none}
+.supp-row:active{background:var(--surface2)}
+.supp-row.taken{opacity:.4}
+.supp-info{flex:1}
+.supp-name{font-size:13px;font-weight:600}
+.supp-note{font-size:10px;color:var(--muted);margin-top:3px;line-height:1.5}
+.medical-note{margin:8px 16px 16px;font-size:10px;color:var(--muted);line-height:1.6;padding:10px 12px;background:var(--surface2);border-radius:10px;border-left:3px solid var(--red)}
+
+/* HISTORY */
+.hist-empty{text-align:center;color:var(--muted);padding:50px 20px;font-size:14px;line-height:1.8}
+.hist-card{margin:8px 16px;border-radius:12px;border:1px solid var(--border);overflow:hidden}
+.hist-header{background:var(--surface2);padding:11px 12px;display:flex;justify-content:space-between;align-items:center;cursor:pointer}
+.hist-date{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:.05em}
+.hist-meta{font-size:11px;color:var(--muted)}
+.hist-body{padding:10px 12px;font-size:12px;color:var(--muted);line-height:1.7;border-top:1px solid var(--border)}
+.hist-ex{display:flex;gap:6px;align-items:baseline}
+.hist-note{margin-top:7px;font-style:italic;color:var(--blue);font-size:11px;padding-top:7px;border-top:1px solid var(--border)}
+
+/* EXPORT */
+.export-card{margin:10px 16px;border-radius:12px;border:1px solid var(--border);overflow:hidden}
+.export-card-header{background:var(--surface2);padding:9px 12px;font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:.08em;color:var(--yellow)}
+.export-body{padding:14px}
+.export-desc{font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.6}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap}
+.btn{padding:10px 16px;border-radius:9px;border:none;font-family:'DM Sans',sans-serif;font-weight:700;font-size:12px;cursor:pointer;transition:.15s;letter-spacing:.04em}
+.btn:active{transform:scale(.97)}
+.btn-green{background:var(--green);color:#0d0d1a}
+.btn-yellow{background:var(--yellow);color:#0d0d1a}
+.btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border)}
+.btn-red{background:var(--red);color:#0d0d1a}
+.export-textarea{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:10px 12px;color:var(--muted);font-size:11px;font-family:monospace;resize:none;min-height:140px;line-height:1.6;margin-top:12px}
+.export-textarea:focus{outline:none}
+.copy-msg{font-size:11px;font-weight:700;text-align:center;margin-top:8px;min-height:18px;color:var(--green)}
+.export-hint{font-size:11px;color:var(--muted);margin-top:10px;line-height:1.6;padding:10px;background:var(--surface2);border-radius:8px}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;display:flex;align-items:flex-end;justify-content:center;backdrop-filter:blur(3px)}
+.modal{background:var(--surface);width:100%;max-width:480px;border-radius:18px 18px 0 0;padding:22px 20px calc(22px + env(safe-area-inset-bottom,0px));border-top:2px solid var(--green)}
+.modal-title{font-family:'Bebas Neue',sans-serif;font-size:20px;margin-bottom:16px;letter-spacing:.06em}
+.modal-field{margin-bottom:12px}
+.modal-label{font-size:11px;color:var(--muted);margin-bottom:4px;font-weight:700;letter-spacing:.05em}
+.modal-input{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:10px 12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:16px}
+.modal-input:focus{outline:none;border-color:var(--green)}
+
+/* STATS */
+.stats-row{display:flex;gap:8px;margin:10px 16px}
+.stat-box{flex:1;background:var(--surface2);border-radius:10px;padding:10px;border:1px solid var(--border);text-align:center}
+.stat-num{font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--green)}
+.stat-label{font-size:10px;color:var(--muted);font-weight:600;letter-spacing:.04em;margin-top:2px}
+
+/* SECTION DIVIDER */
+.section-divider{margin:4px 16px 0;font-family:'Bebas Neue',sans-serif;font-size:12px;color:var(--muted);letter-spacing:.1em;padding:6px 0 2px}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-top">
+    <div class="logo">⛳ Golf Fit Pro</div>
+    <div class="streak-badge" id="streakBadge">🔥 0 Day Streak</div>
+  </div>
+  <div class="day-tabs" id="dayTabs"></div>
+</div>
+
+<div class="scroll-area" id="scrollArea">
+  <div id="mainContent"></div>
+</div>
+
+<div class="bottom-nav">
+  <button class="nav-btn active" id="navWorkout" onclick="switchTab('workout')"><span class="nav-icon">🏋️</span>Workout</button>
+  <button class="nav-btn" id="navSupps" onclick="switchTab('supps')"><span class="nav-icon">💊</span>Supps</button>
+  <button class="nav-btn" id="navHistory" onclick="switchTab('history')"><span class="nav-icon">📊</span>History</button>
+  <button class="nav-btn" id="navExport" onclick="switchTab('export')"><span class="nav-icon">📤</span>Export</button>
+</div>
+
+<!-- Log Modal -->
+<div id="logModal" style="display:none" class="modal-overlay" onclick="overlayClose(event)">
+  <div class="modal">
+    <div class="modal-title" id="modalTitle">Log Exercise</div>
+    <div class="modal-field"><div class="modal-label">SETS</div><input class="modal-input" id="logSets" type="number" inputmode="numeric" placeholder="3"/></div>
+    <div class="modal-field"><div class="modal-label">REPS</div><input class="modal-input" id="logReps" type="number" inputmode="numeric" placeholder="10"/></div>
+    <div class="modal-field"><div class="modal-label">WEIGHT (lbs)</div><input class="modal-input" id="logWeight" type="number" inputmode="decimal" placeholder="0"/></div>
+    <div class="btn-row" style="margin-top:6px">
+      <button class="btn btn-green" onclick="saveLog()">Save</button>
+      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── CONSTANTS ───────────────────────────────────────────
+const DAY_NAMES  = ['MON','TUE','WED','THU','FRI','SAT','SUN'];
+const DAY_LABELS = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+const DAY_TYPES  = ['Recovery','Upper Body','Lower Body','Recovery','Full Body','Golf ⛳','Golf ⛳'];
+const DAY_COLORS = ['#60a5fa','#4ade80','#f87171','#60a5fa','#fbbf24','#34d399','#34d399'];
+
+// ─── PROGRAM DATA ─────────────────────────────────────────
+const PROGRAM = {
+0:{
+  intro:"Reset day after two rounds of golf. Goal is blood flow and range of motion — not pushing hard.",
+  sections:[
+    {title:"ZONE 2 CARDIO · 20–30 MIN",exercises:[
+      {id:"m1",name:"Spin Bike — Zone 2 Steady State",meta:"20–30 min · ~111–120 bpm · conversational pace",timed:true}
+    ]},
+    {title:"MOBILITY FLOW · 20 MIN",exercises:[
+      {id:"m2",name:"Open Books",meta:"1×10/side · lie on side, sweep top arm open"},
+      {id:"m3",name:"Thread the Needle",meta:"1×10/side · hold at end range"},
+      {id:"m4",name:"90/90 Hip Rotations",meta:"10/side"},
+      {id:"m5",name:"World's Greatest Stretch",meta:"5/side",tag:"★ Golf-critical — opens hips + thoracic spine"},
+      {id:"m6",name:"Hip Flexor Stretch — Kneeling",meta:"60 sec/side",timed:true},
+      {id:"m7",name:"Terminal Knee Extensions (TKE)",meta:"2×15/side · band anchored low",tag:"★ Do every single day"},
+      {id:"m8",name:"Calf Stretch — Straight + Bent Knee",meta:"45 sec each",timed:true},
+      {id:"m9",name:"Glute Bridges — Bodyweight",meta:"2×15 · drive through heels, hold 2 sec"},
+      {id:"m10",name:"Band Pull-Aparts",meta:"2×15"},
+      {id:"m11",name:"Cable External Rotations",meta:"2×12/side · light weight, rotate forearm out slowly",warn:"Right shoulder — reduce range at any discomfort"},
+      {id:"m12",name:"Prone Y/T/W Raises",meta:"2×10 each · face down, arms form Y, T, W",warn:"Shoulder-safe replacement for wall slides"}
+    ]}
+  ]
+},
+1:{
+  intro:"Cable-dominant upper body. No overhead pressing. Monitor right shoulder the entire session.",
+  sections:[
+    {title:"WARM-UP · 10 MIN",exercises:[
+      {id:"t1",name:"Thoracic Open Books",meta:"1×10/side"},
+      {id:"t2",name:"Cat / Cow",meta:"10 reps"},
+      {id:"t3",name:"Arm Circles — Small to Large",meta:"Forward ×10, backward ×10"},
+      {id:"t4",name:"Band Pull-Aparts",meta:"2×15"},
+      {id:"t5",name:"Cable External Rotations",meta:"2×12/side",warn:"Right shoulder — light weight only"},
+      {id:"t6",name:"Scap Pushups",meta:"2×10 · protract/retract shoulder blades, arms straight"},
+      {id:"t7",name:"Dead Bugs",meta:"2×10/side · low back flat throughout"}
+    ]},
+    {title:"MAIN WORKOUT — CENTR 3 CABLE",exercises:[
+      {id:"t8",name:"Standing Cable Chest Press",meta:"4×8–10 · cables at chest height, step forward",log:true},
+      {id:"t9",name:"Seated Cable Row",meta:"4×10–12 · neutral grip, pull to lower chest",log:true},
+      {id:"t10",name:"Incline Cable Chest Press",meta:"3×10 · cables low, press upward at angle",log:true,warn:"Safer than barbell incline for right shoulder"},
+      {id:"t11",name:"Single-Arm Cable Row",meta:"3×10/side · slight hip rotation on pull",log:true},
+      {id:"t12",name:"Cable Chest Fly",meta:"2×12 · do NOT go past neutral",log:true,warn:"Stop at neutral — reduce range if right shoulder protests"},
+      {id:"t13",name:"Face Pulls",meta:"3×15 · rope at face height, elbows high and wide",log:true,tag:"★ Most important rotator cuff exercise"},
+      {id:"t14",name:"Pallof Press",meta:"3×12/side · press straight out, resist rotation",log:true,tag:"★ Core anti-rotation — golf stability"}
+    ]},
+    {title:"COOLDOWN · 7 MIN",exercises:[
+      {id:"t15",name:"Pec Stretch — Doorframe or Cable",meta:"60 sec",timed:true},
+      {id:"t16",name:"Lat Stretch — Overhead Reach",meta:"45 sec/side",timed:true},
+      {id:"t17",name:"Upper Trap Stretch",meta:"45 sec/side · ear to shoulder, gentle",timed:true},
+      {id:"t18",name:"Deep Diaphragmatic Breathing",meta:"5 breaths · inhale 4 sec, exhale 6 sec"}
+    ]}
+  ]
+},
+2:{
+  intro:"Knee-protective lower body day. Stop at pain-free depth only. RDL and pull-through are your safest heavy movements.",
+  sections:[
+    {title:"WARM-UP · 10 MIN",exercises:[
+      {id:"w1",name:"Leg Swings — Forward/Back + Lateral",meta:"10 each direction · both legs"},
+      {id:"w2",name:"Hip Openers — Standing Circles",meta:"10 each direction"},
+      {id:"w3",name:"Ankle Mobility — Heel + Toe Raises",meta:"10 each"},
+      {id:"w4",name:"Glute Bridges — Bodyweight",meta:"2×15"},
+      {id:"w5",name:"Mini-Band Lateral Walks",meta:"2×10/side"},
+      {id:"w6",name:"Bird Dogs",meta:"2×10/side · opposite arm + leg, hold 2 sec"},
+      {id:"w7",name:"Terminal Knee Extensions (TKE)",meta:"2×15/side",tag:"★ Do every single day",warn:"Knee — pain-free range only"}
+    ]},
+    {title:"MAIN WORKOUT — CENTR 3 CABLE",exercises:[
+      {id:"w8",name:"Cable Romanian Deadlift (RDL)",meta:"4×8–10 · hinge at hips, soft knee bend",log:true,tag:"Best posterior chain with minimal knee stress"},
+      {id:"w9",name:"Cable Box Squat",meta:"3×10 · sit back to box, pain-free depth only",log:true,warn:"Knee — do NOT push past comfortable depth"},
+      {id:"w10",name:"Supported Split Squat",meta:"3×8/leg · hold cable for balance",log:true,warn:"Knee — pain-free range only"},
+      {id:"w11",name:"Cable Pull-Through",meta:"3×12 · low pulley, drive hips through",log:true,tag:"★ Glute + hamstring builder for golf power"},
+      {id:"w12",name:"Cable Hamstring Curl",meta:"3×12/side · ankle attachment, slow and controlled",log:true},
+      {id:"w13",name:"Step-Back Cable Lunge",meta:"2×10/leg · step BACK to reduce knee shear force",log:true,warn:"Skip → add extra RDL set if knee doesn't tolerate"},
+      {id:"w14",name:"Side Plank",meta:"3×30 sec/side",timed:true},
+      {id:"w15",name:"Dead Bugs",meta:"3×10/side"}
+    ]},
+    {title:"COOLDOWN · 10 MIN",exercises:[
+      {id:"w16",name:"Hamstring Stretch — Seated or Supine",meta:"60 sec",timed:true},
+      {id:"w17",name:"Figure-4 / Pigeon Pose",meta:"60 sec/side",timed:true},
+      {id:"w18",name:"Hip Flexor Stretch — Kneeling",meta:"60 sec/side",timed:true},
+      {id:"w19",name:"Calf Stretch — Straight + Bent Knee",meta:"45 sec each",timed:true}
+    ]}
+  ]
+},
+3:{
+  intro:"Deliberate deload day. Nervous system recovery — not fitness gains. Protect this day.",
+  sections:[
+    {title:"EASY MOVEMENT · 20–40 MIN",exercises:[
+      {id:"th1",name:"Walk — Outdoors Preferred",meta:"20–40 min · easy flat pace · no pushing",timed:true,warn:"Florida heat — early morning or evening only"}
+    ]},
+    {title:"DAILY TKE + MOBILITY · 15 MIN",exercises:[
+      {id:"th2",name:"Terminal Knee Extensions (TKE)",meta:"2×15/side",tag:"★ Every day — non-negotiable for knee health"},
+      {id:"th3",name:"90/90 Hip Stretch",meta:"60 sec/side",timed:true},
+      {id:"th4",name:"Hip Flexor Stretch",meta:"60 sec/side",timed:true},
+      {id:"th5",name:"Open Books",meta:"10/side"},
+      {id:"th6",name:"Thoracic Rotations — Seated",meta:"10/side"},
+      {id:"th7",name:"Band Pull-Aparts",meta:"2×15"},
+      {id:"th8",name:"Prone Y/T/W Raises",meta:"2×10 each",warn:"Shoulder-safe — replaces wall slides"}
+    ]}
+  ]
+},
+4:{
+  intro:"Most sport-specific day. Rotational movements directly translate to golf power. Prioritize sleep and hydration tonight before your golf weekend.",
+  sections:[
+    {title:"WARM-UP · 10 MIN",exercises:[
+      {id:"f1",name:"Open Books",meta:"1×10/side"},
+      {id:"f2",name:"Band Pull-Aparts",meta:"2×15"},
+      {id:"f3",name:"Hip Rotations — Standing",meta:"10/side"},
+      {id:"f4",name:"Dead Bugs",meta:"2×10/side"},
+      {id:"f5",name:"Glute Bridges",meta:"2×15"},
+      {id:"f6",name:"Terminal Knee Extensions (TKE)",meta:"2×12/side",tag:"★ Do every single day"}
+    ]},
+    {title:"MAIN WORKOUT — CENTR 3 CABLE",exercises:[
+      {id:"f7",name:"Single-Arm Cable Chest Press",meta:"3×10/side · standing, core resists rotation",log:true,warn:"Right shoulder — chest height only, no higher"},
+      {id:"f8",name:"Cable Lat Pulldown",meta:"3×10–12 · wide grip, pull to upper chest",log:true},
+      {id:"f9",name:"Cable Squat to Row",meta:"3×10 · squat as cable extends, row as you rise",log:true,warn:"Knee — pain-free depth only"},
+      {id:"f10",name:"Single-Leg Cable RDL",meta:"3×8/leg · balance + posterior chain, start light",log:true},
+      {id:"f11",name:"Cable Rotational Chop — High to Low",meta:"3×12/side · mirrors golf downswing exactly · hips lead",log:true,tag:"★ Most golf-specific exercise in program"},
+      {id:"f12",name:"Cable Lift — Low to High",meta:"3×12/side · trains backswing power pattern",log:true,tag:"★ Golf-specific backswing power"},
+      {id:"f13",name:"Face Pulls",meta:"3×15 · rope at face height, elbows high",log:true,tag:"★ Rotator cuff health every session"},
+      {id:"f14",name:"Cable Curl + Rope Pushdown Superset",meta:"2–3×12 · no rest between movements",log:true},
+      {id:"f15",name:"Pallof Press Hold",meta:"3×30 sec/side · press out and hold for time",timed:true}
+    ]},
+    {title:"COOLDOWN · 10 MIN",exercises:[
+      {id:"f16",name:"Thoracic Mobility — Open Books + Rotations",meta:"10/side"},
+      {id:"f17",name:"Hip Flexor + Pigeon Stretch",meta:"60 sec/side",timed:true},
+      {id:"f18",name:"Hamstring Stretch",meta:"60 sec",timed:true},
+      {id:"f19",name:"Pec + Lat Stretch",meta:"45 sec each",timed:true}
+    ]}
+  ]
+},
+5:{
+  intro:"Golf IS your workout today. Focus: perform well, protect your body, and recover for Sunday's round.",
+  sections:[
+    {title:"PRE-ROUND WARM-UP · 10–15 MIN",exercises:[
+      {id:"s1",name:"Torso Rotations — Club Across Shoulders",meta:"15 each way · wake up thoracic spine"},
+      {id:"s2",name:"Arm Circles — Forward and Back",meta:"10 each direction"},
+      {id:"s3",name:"Leg Swings — Forward/Back + Lateral",meta:"10 each direction/leg"},
+      {id:"s4",name:"Standing Figure-4 Hip Opener",meta:"30 sec/side · ankle to opposite knee"},
+      {id:"s5",name:"Glute Activation — Mini Squats",meta:"15 reps · protect knee on uneven terrain",warn:"Knee — pain-free only on course"},
+      {id:"s6",name:"Band Pull-Aparts",meta:"2×15 · keep light band in your bag",tag:"★ 2 min shoulder prep before first tee"}
+    ]},
+    {title:"POST-ROUND STRETCH · 10–15 MIN",exercises:[
+      {id:"s7",name:"Hip Stretch Sequence",meta:"60 sec each · figure-4, hip flexor, pigeon",timed:true},
+      {id:"s8",name:"Shoulder Cross-Body + Pec Stretch",meta:"45 sec each",timed:true},
+      {id:"s9",name:"Calf Stretch + Thoracic Rotation",meta:"45 sec each",timed:true}
+    ]}
+  ]
+},
+6:{
+  intro:"Second consecutive round — body is working harder today. Pre-round warm-up matters even more. Post-round recovery sets up the whole week ahead.",
+  sections:[
+    {title:"PRE-ROUND WARM-UP · 10–15 MIN",exercises:[
+      {id:"su1",name:"Torso Rotations",meta:"15 each way"},
+      {id:"su2",name:"Arm Circles",meta:"10 each direction"},
+      {id:"su3",name:"Leg Swings + Hip Openers",meta:"10 each",warn:"Knee — loose and dynamic only"},
+      {id:"su4",name:"Glute Activation",meta:"15 reps"}
+    ]},
+    {title:"POST-ROUND STRETCH · 15–20 MIN",exercises:[
+      {id:"su5",name:"Full Hip Stretch — Figure-4",meta:"60 sec/side",timed:true},
+      {id:"su6",name:"Hip Flexor Stretch",meta:"60 sec/side",timed:true},
+      {id:"su7",name:"Pigeon Pose",meta:"60 sec/side",timed:true},
+      {id:"su8",name:"Thoracic Rotation — Open Books",meta:"10/side"},
+      {id:"su9",name:"Pec + Lat Stretch",meta:"45 sec each",timed:true},
+      {id:"su10",name:"Hamstring Stretch",meta:"60 sec",timed:true},
+      {id:"su11",name:"Calf Stretch",meta:"45 sec each",timed:true}
+    ]}
+  ]
+}
+};
+
+const SUPPS = {
+  morning:[
+    {id:"sm1",name:"Losartan — 50mg",note:"Blood pressure medication — take as prescribed with morning meds"},
+    {id:"sm2",name:"NMN — 500mg",note:"Longevity supplement — morning"},
+    {id:"sm3",name:"Vitamin D3 — 50mcg (2,000 IU)",note:"Joint and immune health"},
+    {id:"sm4",name:"One-A-Day Multivitamin",note:"With food"},
+    {id:"sm5",name:"Thorne Creatine Monohydrate — 5g",note:"With food and extra water. Muscle preservation + joint support."},
+    {id:"sm6",name:"Electrolytes",note:"All golf and workout days — Florida heat is critical"}
+  ],
+  preWorkout:[
+    {id:"sp1",name:"Thorne Collagen Fit",note:"30–60 min before activity · Tue / Wed / Fri / Sat / Sun only"},
+    {id:"sp2",name:"Nature Made Vitamin C — 500mg",note:"Taken with collagen for synthesis · same days as collagen"}
+  ],
+  evening:[
+    {id:"se1",name:"BPC-157",note:"4 weeks on / 4 weeks off cycle. Inform prescribing doctor."},
+    {id:"se2",name:"Magnesium Glycinate — 120mg",note:"Consider increasing to 300–400mg with doctor approval"},
+    {id:"se3",name:"Ashwagandha — Goli (2 gummies)",note:"⚠ May have mild BP-lowering effect — monitor with Losartan"},
+    {id:"se4",name:"Melatonin — 2 gummies",note:"Sleep support"},
+    {id:"se5",name:"Sports Research Turmeric Curcumin C3 + BioPerine",note:"With dinner · inflammation support"}
+  ]
+};
+
+// ─── STATE ────────────────────────────────────────────────
+let currentTab = 'workout';
+let currentDay = (new Date().getDay() + 6) % 7;
+let logTargetId = null;
+let expandedHist = {};
+let workoutChecks = {};
+let workoutLogs   = {};
+let suppChecks    = {};
+let sessionNotes  = {};
+
+// ─── STORAGE (localStorage for standalone) ───────────────
+function lsGet(k){ try{return localStorage.getItem(k)}catch(e){return null} }
+function lsSet(k,v){ try{localStorage.setItem(k,v)}catch(e){} }
+
+function loadAll(){
+  workoutChecks = JSON.parse(lsGet('gfp_checks')||'{}');
+  workoutLogs   = JSON.parse(lsGet('gfp_logs')||'{}');
+  suppChecks    = JSON.parse(lsGet('gfp_supps')||'{}');
+  sessionNotes  = JSON.parse(lsGet('gfp_notes')||'{}');
+}
+function saveAll(){
+  lsSet('gfp_checks', JSON.stringify(workoutChecks));
+  lsSet('gfp_logs',   JSON.stringify(workoutLogs));
+  lsSet('gfp_supps',  JSON.stringify(suppChecks));
+  lsSet('gfp_notes',  JSON.stringify(sessionNotes));
+}
+
+// ─── DATE HELPERS ─────────────────────────────────────────
+function todayKey(){
+  const d=new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+function checkKey(exId){ return `${todayKey()}_${exId}`; }
+function suppKey(sid){ return `${todayKey()}_${sid}`; }
+
+// ─── STREAK ───────────────────────────────────────────────
+function getStreak(){
+  const dates = [...new Set(Object.keys(workoutChecks).map(k=>k.slice(0,10)))].sort().reverse();
+  if(!dates.length) return 0;
+  let streak=0, ref=new Date(); ref.setHours(0,0,0,0);
+  for(const d of dates){
+    const dt=new Date(d+'T12:00:00');
+    const diff=Math.round((ref-dt)/86400000);
+    if(diff<=1){streak++;ref=dt;}else break;
+  }
+  return streak;
+}
+
+function getDayProgress(){
+  const day=PROGRAM[currentDay]; let total=0,done=0;
+  for(const s of day.sections) for(const e of s.exercises){total++;if(workoutChecks[checkKey(e.id)])done++;}
+  return{total,done};
+}
+
+// ─── RENDER DAY TABS ─────────────────────────────────────
+function renderDayTabs(){
+  const today=todayKey();
+  document.getElementById('dayTabs').innerHTML=DAY_NAMES.map((n,i)=>{
+    const hasToday=PROGRAM[i].sections.some(s=>s.exercises.some(e=>workoutChecks[`${today}_${e.id}`]));
+    let cls='day-tab';
+    if(i===currentDay) cls+=' active';
+    else if(hasToday) cls+=' has-data';
+    return `<button class="${cls}" onclick="selectDay(${i})">${n}</button>`;
+  }).join('');
+  document.getElementById('streakBadge').textContent=`🔥 ${getStreak()} Day Streak`;
+}
+
+// ─── RENDER WORKOUT ───────────────────────────────────────
+function renderWorkout(){
+  const day=PROGRAM[currentDay];
+  const{total,done}=getDayProgress();
+  const pct=total?Math.round(done/total*100):0;
+  let html=`
+    <div class="day-title">${DAY_LABELS[currentDay]}</div>
+    <span class="day-type-badge" style="background:${DAY_COLORS[currentDay]}22;color:${DAY_COLORS[currentDay]};border:1px solid ${DAY_COLORS[currentDay]}44">${DAY_TYPES[currentDay]}</span>
+    <div class="progress-wrap">
+      <div class="progress-label"><span>${done} / ${total} exercises</span><span style="color:${pct===100?'var(--green)':'var(--muted)'}">${pct}%${pct===100?' ✓':''}</span></div>
+      <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+    </div>
+    <div class="day-intro">${day.intro}</div>`;
+
+  for(const sec of day.sections){
+    html+=`<div class="section"><div class="section-header">${sec.title}</div>`;
+    for(const ex of sec.exercises){
+      const done=!!workoutChecks[checkKey(ex.id)];
+      const logged=workoutLogs[checkKey(ex.id)];
+      html+=`<div class="ex-row${done?' done':''}" onclick="toggleEx('${ex.id}')">
+        <div class="check-box">${done?'✓':''}</div>
+        <div class="ex-info">
+          ${ex.tag?`<div class="ex-tag">${ex.tag}</div>`:''}
+          <div class="ex-name">${ex.name}</div>
+          <div class="ex-meta">${ex.meta}</div>
+          ${ex.warn?`<div class="ex-warn">⚠ ${ex.warn}</div>`:''}
+          ${logged?`<div class="ex-logged">📝 ${logged.sets}×${logged.reps} @ ${logged.weight} lbs</div>`:''}
+        </div>
+        ${ex.log?`<button class="log-btn" onclick="openLog(event,'${ex.id}','${ex.name.replace(/'/g,"\\'").replace(/"/g,'&quot;')}')">LOG</button>`:''}
+      </div>`;
+    }
+    html+='</div>';
+  }
+
+  const nk=`${todayKey()}_${currentDay}`;
+  html+=`<div class="notes-wrap">
+    <div class="notes-label">SESSION NOTES</div>
+    <textarea class="notes-input" id="notesInput" placeholder="How did it feel? Pain levels? PRs? Energy?" oninput="saveNote()">${sessionNotes[nk]||''}</textarea>
+  </div>`;
+
+  document.getElementById('mainContent').innerHTML=html;
+  document.getElementById('scrollArea').scrollTop=0;
+}
+
+// ─── RENDER SUPPS ────────────────────────────────────────
+function renderSupps(){
+  const groups=[
+    {title:'MORNING',items:SUPPS.morning},
+    {title:'PRE-WORKOUT  (Tue / Wed / Fri / Sat / Sun)',items:SUPPS.preWorkout},
+    {title:'EVENING',items:SUPPS.evening}
+  ];
+  let html='';
+  for(const g of groups){
+    html+=`<div class="supp-card"><div class="supp-header">${g.title}</div>`;
+    for(const s of g.items){
+      const taken=!!suppChecks[suppKey(s.id)];
+      html+=`<div class="supp-row${taken?' taken':''}" onclick="toggleSupp('${s.id}')">
+        <div class="check-box" style="margin-top:2px">${taken?'✓':''}</div>
+        <div class="supp-info">
+          <div class="supp-name">${s.name}</div>
+          <div class="supp-note">${s.note}</div>
+        </div>
+      </div>`;
+    }
+    html+='</div>';
+  }
+  html+=`<div class="medical-note">⚠ Medical note: Inform your prescribing doctor about all supplements — especially ashwagandha (additive BP effect with Losartan) and BPC-157 (research peptide, not FDA-approved). This app is not medical advice.</div>`;
+  document.getElementById('mainContent').innerHTML=html;
+  document.getElementById('scrollArea').scrollTop=0;
+}
+
+// ─── RENDER HISTORY ──────────────────────────────────────
+function renderHistory(){
+  // Build date map from all stored data
+  const map={};
+  const allDates=new Set([
+    ...Object.keys(workoutChecks).map(k=>k.slice(0,10)),
+    ...Object.keys(workoutLogs).map(k=>k.slice(0,10))
+  ]);
+  for(const date of allDates){
+    const js=new Date(date+'T12:00:00').getDay();
+    const di=(js+6)%7;
+    const exDone=[];
+    const logs=[];
+    for(const sec of PROGRAM[di].sections){
+      for(const ex of sec.exercises){
+        if(workoutChecks[`${date}_${ex.id}`]) exDone.push(ex.name);
+        const lg=workoutLogs[`${date}_${ex.id}`];
+        if(lg) logs.push(`${ex.name}: ${lg.sets}×${lg.reps} @ ${lg.weight}lbs`);
+      }
+    }
+    const note=sessionNotes[`${date}_${di}`];
+    map[date]={di,dayLabel:DAY_LABELS[di],dayType:DAY_TYPES[di],color:DAY_COLORS[di],exDone,logs,note};
+  }
+
+  const sorted=Object.keys(map).sort().reverse();
+  if(!sorted.length){
+    document.getElementById('mainContent').innerHTML=`<div class="hist-empty">No workout history yet.<br><br>Complete exercises on the Workout tab<br>to start building your log.</div>`;
+    return;
+  }
+
+  // Stats summary
+  const totalDays=sorted.length;
+  const totalEx=Object.keys(workoutChecks).length;
+  let html=`<div class="stats-row">
+    <div class="stat-box"><div class="stat-num">${getStreak()}</div><div class="stat-label">Day Streak</div></div>
+    <div class="stat-box"><div class="stat-num">${totalDays}</div><div class="stat-label">Days Logged</div></div>
+    <div class="stat-box"><div class="stat-num">${totalEx}</div><div class="stat-label">Exercises Done</div></div>
+  </div>`;
+
+  for(const date of sorted){
+    const d=map[date];
+    const exp=expandedHist[date];
+    html+=`<div class="hist-card">
+      <div class="hist-header" onclick="toggleHist('${date}')">
+        <div>
+          <div class="hist-date">${date}</div>
+          <div class="hist-meta" style="color:${d.color}">${d.dayLabel} · ${d.dayType}</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px">
+          <div class="hist-meta">${d.exDone.length} done · ${d.logs.length} logged</div>
+          <div style="font-size:16px">${exp?'▲':'▼'}</div>
+        </div>
+      </div>
+      ${exp?`<div class="hist-body">
+        ${d.exDone.map(n=>`<div class="hist-ex"><span style="color:var(--green)">✓</span> ${n}</div>`).join('')}
+        ${d.logs.length?`<div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border)"><div style="font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.05em;margin-bottom:4px">LOGGED WEIGHTS</div>${d.logs.map(l=>`<div class="hist-ex" style="color:var(--green)">📝 ${l}</div>`).join('')}</div>`:''}
+        ${d.note?`<div class="hist-note">"${d.note}"</div>`:''}
+      </div>`:''}
+    </div>`;
+  }
+  document.getElementById('mainContent').innerHTML=html;
+  document.getElementById('scrollArea').scrollTop=0;
+}
+
+// ─── RENDER EXPORT ───────────────────────────────────────
+function renderExport(){
+  document.getElementById('mainContent').innerHTML=`
+    <div class="export-card">
+      <div class="export-card-header">📤 EXPORT FOR CLAUDE</div>
+      <div class="export-body">
+        <div class="export-desc">Generate a 14-day snapshot of your workouts to paste into any Claude conversation. Claude will use your actual data to give personalized recommendations.</div>
+        <div class="btn-row">
+          <button class="btn btn-yellow" onclick="generateExport()">Generate Snapshot</button>
+          <button class="btn btn-ghost" onclick="clearExportBox()">Clear</button>
+        </div>
+        <textarea class="export-textarea" id="exportBox" readonly placeholder="Tap 'Generate Snapshot' to create your summary..."></textarea>
+        <div class="btn-row" style="margin-top:10px">
+          <button class="btn btn-green" onclick="copyExport()">Copy to Clipboard</button>
+        </div>
+        <div class="copy-msg" id="copyMsg"></div>
+        <div class="export-hint">💡 <strong>How to use:</strong> Copy → open Claude.ai → paste into a new message → ask anything. Try: "Analyze my progress", "Should I adjust volume?", "My shoulder felt worse this week", or "What weights should I target next week?"</div>
+      </div>
+    </div>
+    <div class="export-card" style="margin-top:0">
+      <div class="export-card-header" style="color:var(--red)">⚠ DATA MANAGEMENT</div>
+      <div class="export-body">
+        <div class="export-desc">Your data is stored in this browser's local storage on your device. It persists as long as you don't clear your browser data.</div>
+        <div class="btn-row">
+          <button class="btn btn-ghost" onclick="exportJSON()">Download Backup (JSON)</button>
+        </div>
+      </div>
+    </div>`;
+  document.getElementById('scrollArea').scrollTop=0;
+}
+
+function generateExport(){
+  const today=new Date(); const todayStr=todayKey();
+  // Last 14 days
+  const cutoff=new Date(today); cutoff.setDate(cutoff.getDate()-14);
+  const map={};
+  for(const key of Object.keys(workoutChecks)){
+    const date=key.slice(0,10);
+    if(new Date(date+'T12:00:00')<cutoff) continue;
+    if(!map[date]) map[date]={exIds:[],logs:[],note:null};
+    map[date].exIds.push(key.slice(11));
+  }
+  for(const key of Object.keys(workoutLogs)){
+    const date=key.slice(0,10);
+    if(!map[date]) continue;
+    const exId=key.slice(11); const lg=workoutLogs[key];
+    let name=exId;
+    for(const day of Object.values(PROGRAM)) for(const sec of day.sections){
+      const ex=sec.exercises.find(e=>e.id===exId); if(ex) name=ex.name;
+    }
+    map[date].logs.push(`${name}: ${lg.sets}×${lg.reps} @ ${lg.weight}lbs`);
+  }
+  for(const key of Object.keys(sessionNotes)){
+    const date=key.slice(0,10);
+    if(map[date]&&sessionNotes[key]) map[date].note=sessionNotes[key];
+  }
+
+  const suppToday=[];
+  for(const g of[SUPPS.morning,SUPPS.preWorkout,SUPPS.evening]) for(const s of g){
+    if(suppChecks[suppKey(s.id)]) suppToday.push(s.name.split('—')[0].trim());
+  }
+
+  const sorted=Object.keys(map).sort().reverse();
+  const lines=[];
+  lines.push('=== GOLF FIT PRO — CLAUDE EXPORT ===');
+  lines.push(`Generated: ${todayStr} | Streak: ${getStreak()} days`);
+  lines.push('');
+  lines.push('PROFILE:');
+  lines.push('  Age: 49 | Weight: 163 lbs | Location: Orlando, FL');
+  lines.push('  Right shoulder pain (uncleared — no overhead pressing until physician clears)');
+  lines.push('  Knee history — TKE daily, pain-free depth only on all lower body');
+  lines.push('  Sat + Sun: Golf rounds (year-round)');
+  lines.push('  Equipment: Centr 3 cable trainer, spin bike, resistance bands, med balls');
+  lines.push('  Recovery: Infrared sauna + compression boots');
+  lines.push('  Medication: Losartan 50mg daily (hypertension)');
+  lines.push('');
+  lines.push(`TODAY'S SUPPLEMENTS:`);
+  lines.push(suppToday.length?`  Taken: ${suppToday.join(', ')}`:'  None logged yet today');
+  lines.push('');
+  if(!sorted.length){
+    lines.push('WORKOUT LOG: No data in last 14 days.');
+  } else {
+    lines.push(`WORKOUT LOG (last 14 days — ${sorted.length} days recorded):`);
+    for(const date of sorted){
+      const d=map[date];
+      const js=new Date(date+'T12:00:00').getDay();
+      const di=(js+6)%7;
+      lines.push(`\n  ${date} — ${DAY_LABELS[di]} (${DAY_TYPES[di]})`);
+      lines.push(`  Exercises completed: ${d.exIds.length}`);
+      if(d.logs.length){lines.push('  Weights logged:');d.logs.forEach(l=>lines.push(`    • ${l}`));}
+      if(d.note) lines.push(`  Note: "${d.note}"`);
+    }
+  }
+  lines.push('');
+  lines.push('PROGRAM RULES (for Claude):');
+  lines.push('  • No overhead pressing — right shoulder uncleared');
+  lines.push('  • Centr 3 cable machine preferred over dumbbells/barbells');
+  lines.push('  • TKE every single day for knee maintenance');
+  lines.push('  • Face pulls every upper body session');
+  lines.push('  • Prone Y/T/W replaces wall slides (shoulder irritation)');
+  lines.push('  • Step-back lunges only — skip if knee protests, sub RDL');
+  lines.push('  • Ashwagandha may have additive BP effect with Losartan — monitor');
+  lines.push('=== END EXPORT ===');
+
+  document.getElementById('exportBox').value=lines.join('\n');
+}
+
+function copyExport(){
+  const txt=document.getElementById('exportBox').value;
+  if(!txt||txt.startsWith('Tap')){document.getElementById('copyMsg').textContent='Generate a snapshot first.';return;}
+  const msg=document.getElementById('copyMsg');
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(()=>{
+      msg.textContent='✓ Copied! Paste into Claude.';
+      setTimeout(()=>{msg.textContent=''},3500);
+    }).catch(()=>fallbackCopy(txt,msg));
+  } else { fallbackCopy(txt,msg); }
+}
+function fallbackCopy(txt,msg){
+  const ta=document.getElementById('exportBox');
+  ta.removeAttribute('readonly'); ta.select(); ta.setSelectionRange(0,9999);
+  try{document.execCommand('copy');msg.textContent='✓ Copied!';}catch(e){msg.textContent='Select all text above and copy manually.';}
+  ta.setAttribute('readonly','');
+  setTimeout(()=>{msg.textContent=''},3500);
+}
+function clearExportBox(){const el=document.getElementById('exportBox');if(el)el.value='';}
+
+function exportJSON(){
+  const data={workoutChecks,workoutLogs,suppChecks,sessionNotes,exported:new Date().toISOString()};
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a'); a.href=url;
+  a.download=`GolfFitPro_backup_${todayKey()}.json`; a.click();
+  URL.revokeObjectURL(url);
+}
+
+// ─── INTERACTIONS ────────────────────────────────────────
+function toggleEx(exId){
+  const k=checkKey(exId);
+  if(workoutChecks[k]) delete workoutChecks[k]; else workoutChecks[k]=true;
+  saveAll(); renderDayTabs(); renderWorkout();
+}
+function toggleSupp(sid){
+  const k=suppKey(sid);
+  if(suppChecks[k]) delete suppChecks[k]; else suppChecks[k]=true;
+  saveAll(); renderSupps();
+}
+function toggleHist(date){expandedHist[date]=!expandedHist[date];renderHistory();}
+
+function openLog(e,exId,name){
+  e.stopPropagation(); logTargetId=exId;
+  const ex=workoutLogs[checkKey(exId)];
+  document.getElementById('modalTitle').textContent=name;
+  document.getElementById('logSets').value=ex?.sets||'';
+  document.getElementById('logReps').value=ex?.reps||'';
+  document.getElementById('logWeight').value=ex?.weight||'';
+  document.getElementById('logModal').style.display='flex';
+  setTimeout(()=>document.getElementById('logSets').focus(),100);
+}
+function saveLog(){
+  if(!logTargetId) return;
+  workoutLogs[checkKey(logTargetId)]={
+    sets:document.getElementById('logSets').value,
+    reps:document.getElementById('logReps').value,
+    weight:document.getElementById('logWeight').value
+  };
+  workoutChecks[checkKey(logTargetId)]=true;
+  saveAll(); closeModal(); renderDayTabs(); renderWorkout();
+}
+function closeModal(){document.getElementById('logModal').style.display='none';logTargetId=null;}
+function overlayClose(e){if(e.target===document.getElementById('logModal'))closeModal();}
+
+function saveNote(){
+  const nk=`${todayKey()}_${currentDay}`;
+  sessionNotes[nk]=document.getElementById('notesInput')?.value||'';
+  saveAll();
+}
+
+function selectDay(i){
+  currentDay=i; renderDayTabs();
+  if(currentTab==='workout') renderWorkout();
+}
+function switchTab(tab){
+  currentTab=tab;
+  ['workout','supps','history','export'].forEach(t=>{
+    const el=document.getElementById('nav'+t.charAt(0).toUpperCase()+t.slice(1));
+    if(el) el.classList.toggle('active',t===tab);
+  });
+  if(tab==='workout') renderWorkout();
+  else if(tab==='supps') renderSupps();
+  else if(tab==='history') renderHistory();
+  else if(tab==='export') renderExport();
+}
+
+// ─── KEYBOARD close on Enter for modal ───────────────────
+document.addEventListener('keydown',e=>{
+  if(e.key==='Enter'&&document.getElementById('logModal').style.display!=='none'){
+    const active=document.activeElement;
+    if(active&&active.classList.contains('modal-input')) saveLog();
+  }
+  if(e.key==='Escape') closeModal();
+});
+
+// ─── PWA INSTALL PROMPT ───────────────────────────────────
+let deferredPrompt = null;
+
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredPrompt = e;
+  showInstallBanner();
+});
+
+function showInstallBanner() {
+  if (document.getElementById('installBanner')) return;
+  const banner = document.createElement('div');
+  banner.id = 'installBanner';
+  banner.style.cssText = `
+    position:fixed;bottom:70px;left:50%;transform:translateX(-50%);
+    width:calc(100% - 32px);max-width:448px;
+    background:linear-gradient(135deg,#1a2e1a,#0d1f0d);
+    border:1px solid var(--green);border-radius:12px;
+    padding:12px 14px;display:flex;align-items:center;gap:10px;
+    z-index:150;box-shadow:0 4px 24px rgba(74,222,128,.2)`;
+  banner.innerHTML = `
+    <span style="font-size:22px">⛳</span>
+    <div style="flex:1">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--green);letter-spacing:.05em">ADD TO HOME SCREEN</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:1px">Install Golf Fit Pro as an app</div>
+    </div>
+    <button onclick="doInstall()" style="background:var(--green);color:#0d0d1a;border:none;padding:8px 14px;border-radius:8px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:12px;cursor:pointer">Install</button>
+    <button onclick="dismissInstall()" style="background:transparent;border:none;color:var(--muted);font-size:20px;cursor:pointer;padding:0 4px">×</button>`;
+  document.body.appendChild(banner);
+}
+
+function doInstall() {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  deferredPrompt.userChoice.then(result => {
+    deferredPrompt = null;
+    dismissInstall();
+  });
+}
+
+function dismissInstall() {
+  const b = document.getElementById('installBanner');
+  if (b) b.remove();
+}
+
+// Register service worker for offline use
+if ('serviceWorker' in navigator) {
+  const swCode = `
+    const CACHE = 'golfitpro-v1';
+    const ASSETS = ['/'];
+    self.addEventListener('install', e => e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS))));
+    self.addEventListener('fetch', e => e.respondWith(caches.match(e.request).then(r => r || fetch(e.request))));
+  `;
+  const blob = new Blob([swCode], {type:'application/javascript'});
+  const swUrl = URL.createObjectURL(blob);
+  navigator.serviceWorker.register(swUrl).catch(()=>{});
+}
+
+// ─── INIT ─────────────────────────────────────────────────
+loadAll();
+renderDayTabs();
+renderWorkout();
+</script>
+</body>
+</html>
